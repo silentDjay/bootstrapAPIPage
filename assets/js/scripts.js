@@ -1,13 +1,6 @@
 $(document).ready( function () {
   "use strict";
 
-// I followed the instructions here to link up to the Spotify API: https://github.com/jmperez/spotify-web-api-js
-// var spotifyApi = new SpotifyWebApi();
-// spotifyApi.setAccessToken('<here_your_access_token>');
-
-// var Spotify = require('spotify-web-api-js');
-// var s = new Spotify();
-
 // this stackoverflow helped me get my google maps call working: http://stackoverflow.com/questions/34466718/googlemaps-does-not-load-on-page-load
 
   var map;
@@ -46,9 +39,9 @@ $(document).ready( function () {
         if (status === google.maps.GeocoderStatus.OK) {
           if (results[4]) {
             var countryClicked = results[4].formatted_address;
-            console.log(results[4]);
-            console.log("you clicked ");
-            console.log(countryClicked);
+            // console.log(results[4]);
+            // console.log("you clicked ");
+            // console.log(countryClicked);
             $(".modal").modal('show');
             $(".modal").html("You clicked on " + countryClicked);
 
@@ -58,10 +51,32 @@ $(document).ready( function () {
             console.log(countryClicked);
 
             // here comes the spotify stuff
+            // in addition to spotify's own API documentation, this resource helped me out a lot: http://jsfiddle.net/JMPerez/0u0v7e1b/
             $.getJSON( 'https://api.spotify.com/v1/search/?q='+countryClicked+'&type=track', function (data) {
 
-                // this does kinda work!
+                // this returns an array of objects (tracks)
                 console.log(data.tracks.items);
+                var tracksArray= data.tracks.items;
+
+                for (var i=0; i<tracksArray.length; i++){
+                  console.log(tracksArray[i].name);
+                  var trackName = tracksArray[i].name;
+                  console.log(tracksArray[i].artists[0].name);
+                  var artistName = tracksArray[i].artists[0].name;
+
+                  // $(".modal").modal('show');
+                  // $(".modal").html("You clicked on " + countryClicked);
+
+                  $(".songList").show();
+                  $(".songList").append('<li class="trackArtist">+ '+trackName+' by '+artistName+'</li>');
+                  // $(".modal").html('<li class="trackArtist">'+trackName+' by '+artistName+'</li>');
+
+
+                }
+
+
+
+                //iterate through the arrays to get the song titles and artists (and years)???
 
             });
 //     });
