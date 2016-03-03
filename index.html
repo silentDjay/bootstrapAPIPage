@@ -5,20 +5,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="assets/css/styles.css">
   </head>
   <body>
-    <div class="col-lg-4">
+    <div class="well">Click anywhere to find tunes about that place...</div>
+    <!-- <div class="col-lg-4">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Click on a country to find tunes...">
+        <input type="text" class="form-control" placeholder="Click anywhere to find tunes about that place...">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
+          <button class="btn btn-default" type="button"></button>
         </span>
-      </div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
+      </div>
+    </div> -->
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          </div>
+        </div>
+    </div>
+
     <div id="map"></div>
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="assets/js/scripts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHTJSU8JPT2P6W-GmchhsryR4YkPGeeTI&callback=initMap"
     async defer></script>
