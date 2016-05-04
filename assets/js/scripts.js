@@ -33,60 +33,113 @@ $(document).ready( function () {
     //this function below gets the country name based on the latLng coordinates of the click
     // this documentation provided all of my answers: https://developers.google.com/maps/documentation/javascript/geocoding#ReverseGeocoding
 
+    var geocoder = new google.maps.Geocoder;
+    var latlng = {lat: latitude, lng: longitude};
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      console.log(results);
+      // console.log(results[4].types[0]);
+      if (status === google.maps.GeocoderStatus.OK) {
+        for (var i=0; i < results.length; i++){
+          if (results[i].types[0] === "country"){
+            var countryClicked = results[i].formatted_address;
+            $(".modal").modal('show');
+            $(".modal").html("You clicked on " + countryClicked);
+          } else {
+            // do nothing - this level of results[i] does not contain the country name
+          }
+        }
+      } else {
+        console.log("geolocator is not ok");
+        $(".modal").modal('show');
+        $(".modal").html("You clicked on unclaimed nautical territory! Try again!");
+      }
+
+    });
+
       var geocoder = new google.maps.Geocoder;
       var latlng = {lat: latitude, lng: longitude};
       geocoder.geocode({'location': latlng}, function(results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
-          if (results[4]) {
-            var countryClicked = results[4].formatted_address;
-            // console.log(results[4]);
-            // console.log("you clicked ");
-            // console.log(countryClicked);
-            $(".modal").modal('show');
-            $(".modal").html("You clicked on " + countryClicked);
+          for (var i=0; i < results.length; i++){
+            if (results[i].types[0] === "country"){
+              var countryClicked = results[i].formatted_address;
+              // var placeArray = countryClicked.split(" ");
+              // console.log(placeArray);
+              // countryClicked = placeArray.join("+");
+              // console.log(countryClicked);
 
-            var placeArray = countryClicked.split(" ");
-            console.log(placeArray);
-            countryClicked = placeArray.join("+");
-            console.log(countryClicked);
+              // here comes the spotify stuff
+              // in addition to spotify's own API documentation, this resource helped me out a lot: http://jsfiddle.net/JMPerez/0u0v7e1b/
+              $.getJSON( 'https://api.spotify.com/v1/search/?q='+countryClicked+'&type=track', function (data) {
 
-            // here comes the spotify stuff
-            // in addition to spotify's own API documentation, this resource helped me out a lot: http://jsfiddle.net/JMPerez/0u0v7e1b/
-            $.getJSON( 'https://api.spotify.com/v1/search/?q='+countryClicked+'&type=track', function (data) {
+                  // this returns an array of objects (tracks)
+                  console.log(data.tracks.items);
+                  var tracksArray= data.tracks.items;
 
-                // this returns an array of objects (tracks)
-                console.log(data.tracks.items);
-                var tracksArray= data.tracks.items;
+                  for (var i=0; i<tracksArray.length; i++){
+                    // console.log(tracksArray[i].name);
+                    var trackName = tracksArray[i].name;
+                    // console.log(tracksArray[i].artists[0].name);
+                    var artistName = tracksArray[i].artists[0].name;
 
-                for (var i=0; i<tracksArray.length; i++){
-                  console.log(tracksArray[i].name);
-                  var trackName = tracksArray[i].name;
-                  console.log(tracksArray[i].artists[0].name);
-                  var artistName = tracksArray[i].artists[0].name;
+                    $(".songList").show();
+                    $(".songList").append('<li class="trackArtist">+ '+trackName+' by '+artistName+'</li>');
+                    // $(".modal").html('<li class="trackArtist">'+trackName+' by '+artistName+'</li>');
 
-                  // $(".modal").modal('show');
-                  // $(".modal").html("You clicked on " + countryClicked);
+                  }
+                  //iterate through the arrays to get the song titles and artists (and years)???
 
-                  $(".songList").show();
-                  $(".songList").append('<li class="trackArtist">+ '+trackName+' by '+artistName+'</li>');
-                  // $(".modal").html('<li class="trackArtist">'+trackName+' by '+artistName+'</li>');
-
-
-                }
-
-
-
-                //iterate through the arrays to get the song titles and artists (and years)???
-
-            });
-//     });
-// };
-
-          } else {
-            $(".modal").modal('show');
-            $(".modal").html("No tunes about that place. Click somewhere else!");
-            // window.alert("No tunes about this place. Click somewhere else!");
+              });
+              $(".modal").modal('show');
+              $(".modal").html("You clicked on " + countryClicked);
+            } else {
+              // do nothing - this level of results[i] does not contain the country name
+            }
           }
+            // $(".modal").modal('show');
+            // $(".modal").html("You clicked on " + countryClicked);
+            //
+            // var placeArray = countryClicked.split(" ");
+            // console.log(placeArray);
+            // countryClicked = placeArray.join("+");
+            // console.log(countryClicked);
+            //
+            // // here comes the spotify stuff
+            // // in addition to spotify's own API documentation, this resource helped me out a lot: http://jsfiddle.net/JMPerez/0u0v7e1b/
+            // $.getJSON( 'https://api.spotify.com/v1/search/?q='+countryClicked+'&type=track', function (data) {
+            //
+            //     // this returns an array of objects (tracks)
+            //     console.log(data.tracks.items);
+            //     var tracksArray= data.tracks.items;
+            //
+            //     for (var i=0; i<tracksArray.length; i++){
+            //       console.log(tracksArray[i].name);
+            //       var trackName = tracksArray[i].name;
+            //       console.log(tracksArray[i].artists[0].name);
+            //       var artistName = tracksArray[i].artists[0].name;
+            //
+            //       // $(".modal").modal('show');
+            //       // $(".modal").html("You clicked on " + countryClicked);
+            //
+            //       $(".songList").show();
+            //       $(".songList").append('<li class="trackArtist">+ '+trackName+' by '+artistName+'</li>');
+            //       // $(".modal").html('<li class="trackArtist">'+trackName+' by '+artistName+'</li>');
+            //
+            //
+            //     }
+            //
+            //
+            //
+            //     //iterate through the arrays to get the song titles and artists (and years)???
+            //
+            // });
+
+
+          // } else {
+          //   $(".modal").modal('show');
+          //   $(".modal").html("No tunes about that place. Click somewhere else!");
+          //   // window.alert("No tunes about this place. Click somewhere else!");
+
         } else {
           $(".modal").modal('show');
           $(".modal").html("No tunes about that place. Click somewhere else!");
