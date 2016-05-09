@@ -1,6 +1,26 @@
 $(document).ready( function () {
   "use strict";
 
+  var countryToClick;
+
+  /**
+  http://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
+  * Returns a random integer between min (inclusive) and max (inclusive)
+  * Using Math.round() will give you a non-uniform distribution!
+  */
+
+  $.ajax({
+    method: 'GET',
+    url: 'https://restcountries.eu/rest/v1/all',
+    success: function (data) {
+      var randCountryNum = Math.floor(Math.random() * (246 - 0 + 1)) + 0;
+      console.log(data[randCountryNum].name);
+      // console.log(data);
+    }, error: function (request,error) {
+      console.log(request);
+    }
+  });
+
 // this stackoverflow helped me get my google maps call working: http://stackoverflow.com/questions/34466718/googlemaps-does-not-load-on-page-load
 
   var map;
