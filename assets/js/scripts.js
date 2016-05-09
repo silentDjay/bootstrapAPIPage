@@ -15,6 +15,9 @@ $(document).ready( function () {
     success: function (data) {
       var randCountryNum = Math.floor(Math.random() * (246 - 0 + 1)) + 0;
       console.log(data[randCountryNum].name);
+      countryToClick = data[randCountryNum].name;
+      $(".modal").modal('show');
+      $(".modal").html("Click on " + countryToClick);
       // console.log(data);
     }, error: function (request,error) {
       console.log(request);
@@ -70,8 +73,13 @@ $(document).ready( function () {
           for (var i=0; i < results.length; i++){
             if (results[i].types[0] === "country"){
               var countryClicked = results[i].formatted_address;
-              $(".modal").modal('show');
-              $(".modal").html("You clicked on " + countryClicked);
+              if (countryClicked === countryToClick){
+                $(".modal").modal('show');
+                $(".modal").html("You clicked on " + countryClicked + "<br>Good Job!");
+              } else {
+                $(".modal").modal('show');
+                $(".modal").html("You clicked on " + countryClicked + "<br>Try Again!");
+              }
             } else {
               // do nothing - this level of results[i] does not contain the country name
             }
